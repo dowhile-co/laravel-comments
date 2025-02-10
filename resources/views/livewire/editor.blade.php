@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore class="relative dark:text-white dark:bg-black">
+    <div wire:ignore class="relative dark:text-white dark:bg-gray-900">
         <div @click.stop id="{{ $editorId }}" class="min-h-32 rounded rounded-t-none pointer-events"></div>
         <div id="{{ $toolbarId }}" class="w-full"></div>
 
@@ -10,7 +10,7 @@
             @user-not-mentioned-{{ $editorId }}.window="show=false"
             @user-selected-{{ $editorId }}.window="show=false"
             @keyup.escape.window="if(show){$wire.dispatch('user-not-mentioned-' + '{{ $editorId }}'); show=false}"
-            class="absolute bottom-[12rem] left-0 z-10 w-full"
+            class="absolute bottom-[12rem] start-0 z-10 w-full"
         >
             <livewire:comments-user-list :$guestModeEnabled :$editorId />
         </div>
