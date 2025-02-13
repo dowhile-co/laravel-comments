@@ -54,6 +54,9 @@ class CreateCommentForm extends Component
 
     public string $text = "";
 
+    public $projectId;
+
+    public $teamId;
     public string $editorId;
 
     #[Locked]
@@ -79,9 +82,13 @@ class CreateCommentForm extends Component
     {
         Helpers::checkCommentableModelValidity($model);
 
-        $this->editorId =  Str::uuid();
+        $this->editorId = Str::uuid();
 
         $this->model = $model;
+
+        $this->projectId = $model->id;
+
+        $this->teamId = $model->team_id;
 
         $this->secureGuestMode = app(SecureGuestModeManager::class);
 
