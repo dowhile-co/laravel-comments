@@ -17,7 +17,7 @@ class Editor extends Component
 
     public string $objectId;
 
-    public string $folder;
+    public string $objectName;
 
     public string $teamId;
     public string $id;
@@ -32,7 +32,7 @@ class Editor extends Component
     /**
      * @throws \Throwable
      */
-    public function mount(string $editorId, bool $guestModeEnabled, bool $disableEditor = false, string $objectId = '', string $teamId = '', string $folder =''): void
+    public function mount(string $editorId, bool $guestModeEnabled, bool $disableEditor = false, string $objectId = '', string $teamId = '', string $objectName =''): void
     {
         throw_unless(Str::isUuid($editorId), InvalidEditorIDException::make());
 
@@ -47,7 +47,7 @@ class Editor extends Component
         
         $this->objectId = $objectId;
 
-        $this->folder = $folder;
+        $this->objectName = $objectName;
 
         $this->teamId = $teamId;
     }
