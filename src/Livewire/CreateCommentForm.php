@@ -54,7 +54,9 @@ class CreateCommentForm extends Component
 
     public string $text = "";
 
-    public $projectId;
+    public $objectId;
+
+    public $folder;
 
     public $teamId;
     public string $editorId;
@@ -86,7 +88,9 @@ class CreateCommentForm extends Component
 
         $this->model = $model;
 
-        $this->projectId = $model->id;
+        $this->objectId = $model->id;
+
+        $this->folder = $model->folder_name;
 
         $this->teamId = $model->team_id;
 
