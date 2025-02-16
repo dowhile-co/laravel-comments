@@ -64,6 +64,12 @@ class CreateCommentReplyForm extends Component
 
     public string $text = "";
 
+    public $objectId;
+
+    public $objectName;
+
+    public $teamId;
+
     public string $editorId;
 
     #[Locked]
@@ -105,6 +111,12 @@ class CreateCommentReplyForm extends Component
         $this->disableEditor = $this->guestMode && !$this->secureGuestMode->allowed();
 
         $this->authenticated = $this->relatedModel->authCheck();
+
+        $this->objectId = $relatedModel->id;
+
+        $this->objectName = $relatedModel->getTable();
+
+        $this->teamId = $relatedModel->team_id;
 
         $this->editorId = Str::uuid();
 
