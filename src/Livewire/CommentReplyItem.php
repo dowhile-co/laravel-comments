@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use LakM\Comments\Actions\DeleteCommentReplyAction;
 use LakM\Comments\Contracts\CommentableContract;
 use LakM\Comments\Models\Comment;
@@ -77,6 +78,16 @@ class CommentReplyItem extends Component
     public function delete(Reply $reply): void
     {
         $this->skipRender();
+
+        $content = $reply->text;
+        if (preg_match('/<img[^>]+src="([^">]+)"/', $content, $matches)) {
+            $imageUrl = $matches[1];
+
+            $relativePath = str_replace('/storage/', '', $imageUrl);
+            if (Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+        }
 
         if ($this->canDeleteReply($reply) && DeleteCommentReplyAction::execute($reply)) {
             $this->dispatch('reply-deleted-' . $this->comment->getKey(), replyId: $reply->getKey(), commentId: $this->comment->getKey());

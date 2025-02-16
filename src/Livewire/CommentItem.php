@@ -6,6 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use LakM\Comments\Actions\DeleteCommentAction;
 use LakM\Comments\Contracts\CommentableContract;
 use LakM\Comments\Helpers;
@@ -66,6 +67,16 @@ class CommentItem extends Component
     public function delete(Comment $comment): void
     {
         $this->skipRender();
+
+        $content = $comment->text;
+        if (preg_match('/<img[^>]+src="([^">]+)"/', $content, $matches)) {
+            $imageUrl = $matches[1];
+
+            $relativePath = str_replace('/storage/', '', $imageUrl);
+            if (Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+        }
 
         if ($this->model->canDeleteComment($comment) && DeleteCommentAction::execute($comment)) {
             $this->dispatch('comment-deleted', commentId: $comment->getKey());

@@ -4,6 +4,7 @@ namespace LakM\Comments\Livewire;
 
 use GrahamCampbell\Security\Facades\Security;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use LakM\Comments\Actions\UpdateCommentAction;
 use LakM\Comments\Contracts\CommentableContract;
@@ -59,6 +60,24 @@ class UpdateCommentForm extends Component
         $this->validate();
 
         $data = $this->getFormData();
+
+        $oldText = $this->comment->text;
+        preg_match_all('/<img[^>]+src="([^">]+)"/', $oldText, $oldMatches);
+        $oldImages = $oldMatches[1] ?? [];
+
+        $newText = $data['text'];
+        preg_match_all('/<img[^>]+src="([^">]+)"/', $newText, $newMatches);
+        $newImages = $newMatches[1] ?? [];
+
+        $imagesToRemove = array_diff($oldImages, $newImages);
+
+        foreach ($imagesToRemove as $imageUrl) {
+            $relativePath = str_replace('/storage/', '', $imageUrl);
+
+            if (Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+        }
 
         if ($this->model->canEditComment($this->comment) && UpdateCommentAction::execute($this->comment, $data)) {
             $this->dispatch('comment-updated', commentId: $this->comment->getKey(), text: $data['text']);

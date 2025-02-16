@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use LakM\Comments\Actions\UpdateCommentReplyAction;
 use LakM\Comments\Models\Reply;
@@ -51,6 +52,24 @@ class UpdateCommentReplyForm extends Component
         $this->validate();
 
         $data = $this->getFormData();
+
+        $oldText = $this->reply->text;
+        preg_match_all('/<img[^>]+src="([^">]+)"/', $oldText, $oldMatches);
+        $oldImages = $oldMatches[1] ?? [];
+
+        $newText = $data['text'];
+        preg_match_all('/<img[^>]+src="([^">]+)"/', $newText, $newMatches);
+        $newImages = $newMatches[1] ?? [];
+
+        $imagesToRemove = array_diff($oldImages, $newImages);
+
+        foreach ($imagesToRemove as $imageUrl) {
+            $relativePath = str_replace('/storage/', '', $imageUrl);
+
+            if (Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+        }
 
         if ($this->canUpdateReply($this->reply) && UpdateCommentReplyAction::execute($this->reply, $data)) {
             $this->dispatch(
