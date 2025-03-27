@@ -88,6 +88,8 @@ class CreateCommentForm extends Component
 
         $this->model = $model;
 
+        $this->objectName = $model->objectName;
+
         if ($this->objectName === 'projects') {
             $this->objectNumberName = $model->project_number . '-' . $model->name;
         } else if ($this->objectName === 'tasks') {
@@ -95,9 +97,6 @@ class CreateCommentForm extends Component
         } else {
             $this->objectNumberName = $model->id;
         }
-
-
-        $this->objectName = $model->objectName;
 
         $this->teamId = $model->team_id;
 
