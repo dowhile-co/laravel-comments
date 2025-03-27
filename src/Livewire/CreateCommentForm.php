@@ -88,7 +88,7 @@ class CreateCommentForm extends Component
 
         $this->model = $model;
 
-        $this->objectId = $model->id;
+        $this->objectId = $model->project_number . '-' . $model->name;
 
         $this->objectName = $model->objectName;
 

@@ -112,7 +112,7 @@ class CreateCommentReplyForm extends Component
 
         $this->authenticated = $this->relatedModel->authCheck();
 
-        $this->objectId = $relatedModel->id;
+        $this->objectId = $relatedModel->project_number . '-' . $relatedModel->name;
 
         $this->objectName = $relatedModel->getTable();
 
