@@ -15,7 +15,7 @@ class Editor extends Component
     #[Modelable]
     public string $text = '';
 
-    public string $objectId;
+    public string $objectNumberName;
 
     public string $objectName;
 
@@ -32,7 +32,7 @@ class Editor extends Component
     /**
      * @throws \Throwable
      */
-    public function mount(string $editorId, bool $guestModeEnabled, bool $disableEditor = false, string $objectId = '', string $teamId = '', string $objectName =''): void
+    public function mount(string $editorId, bool $guestModeEnabled, bool $disableEditor = false, string $objectNumberName = '', string $teamId = '', string $objectName =''): void
     {
         throw_unless(Str::isUuid($editorId), InvalidEditorIDException::make());
 
@@ -45,7 +45,7 @@ class Editor extends Component
 
         $this->disableEditor = $disableEditor;
         
-        $this->objectId = $objectId;
+        $this->objectNumberName = $objectNumberName;
 
         $this->objectName = $objectName;
 

@@ -54,7 +54,7 @@ class CreateCommentForm extends Component
 
     public string $text = "";
 
-    public $objectId;
+    public $objectNumberName;
 
     public $objectName;
 
@@ -88,7 +88,14 @@ class CreateCommentForm extends Component
 
         $this->model = $model;
 
-        $this->objectId = $model->project_number . '-' . $model->name;
+        if ($this->objectName === 'projects') {
+            $this->objectNumberName = $model->project_number . '-' . $model->name;
+        } else if ($this->objectName === 'tasks') {
+            $this->objectNumberName = $model->task_number . '-' . $model->title;
+        } else {
+            $this->objectNumberName = $model->id;
+        }
+
 
         $this->objectName = $model->objectName;
 

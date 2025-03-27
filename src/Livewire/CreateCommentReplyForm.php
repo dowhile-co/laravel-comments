@@ -64,7 +64,7 @@ class CreateCommentReplyForm extends Component
 
     public string $text = "";
 
-    public $objectId;
+    public $objectNumberName;
 
     public $objectName;
 
@@ -112,9 +112,15 @@ class CreateCommentReplyForm extends Component
 
         $this->authenticated = $this->relatedModel->authCheck();
 
-        $this->objectId = $relatedModel->project_number . '-' . $relatedModel->name;
-
         $this->objectName = $relatedModel->getTable();
+
+        if ($this->objectName === 'projects') {
+            $this->objectNumberName = $relatedModel->project_number . '-' . $relatedModel->name;
+        } else if ($this->objectName === 'tasks') {
+            $this->objectNumberName = $relatedModel->task_number . '-' . $relatedModel->title;
+        } else {
+            $this->objectNumberName = $relatedModel->id;
+        }
 
         $this->teamId = $relatedModel->team_id;
 
