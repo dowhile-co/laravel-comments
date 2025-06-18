@@ -38,6 +38,8 @@ class CommentItem extends Component
 
     public ?string $profileUrl = null;
 
+    public bool $shouldEnableShareButton = true;
+
     /**
      * @param  Comment $comment
      * @param  bool $guestMode

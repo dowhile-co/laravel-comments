@@ -5,7 +5,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use LakM\Comments\Enums\Sort;
 use LakM\Comments\Livewire\CommentReplyList;
-
 use LakM\Comments\Models\Reply;
 use Pest\Expectation;
 
@@ -47,7 +46,7 @@ it('can render comment reply list in guest mode', function () {
 
     livewire(CommentReplyList::class, ['comment' => $comment, 'relatedModel' => $video, 'total' => 1])
         ->call('setShowStatus')
-        ->assertSeeText($reply->ownerName(false))
+        ->assertSeeText(Str::limit($reply->ownerName(false), 10))
         ->assertSeeText($text)
         ->assertOk();
 });

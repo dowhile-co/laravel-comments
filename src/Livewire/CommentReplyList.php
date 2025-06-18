@@ -11,6 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use LakM\Comments\Abstracts\AbstractQueries;
 use LakM\Comments\Contracts\CommentableContract;
 use LakM\Comments\Enums\Sort;
+use LakM\Comments\Livewire\Concerns\HasSingleThread;
 use LakM\Comments\Models\Comment;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
@@ -24,6 +25,7 @@ use Livewire\WithPagination;
 class CommentReplyList extends Component
 {
     use WithPagination;
+    use HasSingleThread;
 
     public bool $show = false;
 
@@ -54,6 +56,8 @@ class CommentReplyList extends Component
 
     public string $filter = '';
 
+    public bool $showFilters = true;
+
     /**
      * @param  Comment  $comment
      * @param  Model&CommentableContract  $relatedModel
@@ -82,6 +86,8 @@ class CommentReplyList extends Component
         $this->setPaginationRequired();
 
         $this->setApprovalRequired();
+
+        $this->showFilters = !$this->shouldShowSingleThread();
     }
 
     public function paginate(): void

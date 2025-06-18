@@ -40,6 +40,8 @@ class CommentReplyItem extends Component
 
     public ?string $profileUrl;
 
+    public bool $shouldEnableShareButton = false;
+
     /**
      * @param  Comment $comment
      * @param  Reply $reply
